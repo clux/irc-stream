@@ -20,7 +20,9 @@ var gu = require('gu')(scriptPath, scriptFiles);
 ircStream.pipe(gu).pipe(ircStream);
 ```
 
-The first three `irc-stream` arguments are simply passed through to the [irc module](https://npmjs.org/package/irc). [Standing on the shoulders of giants](wikipedia newton).
+The first three `irc-stream` arguments are simply passed through to the [irc module](https://npmjs.org/package/irc). [Standing on the shoulders of giants](http://en.wikipedia.org/wiki/Standing_on_the_shoulders_of_giants).
+
+TODO: reveal extra args
 
 ## Installation
 
