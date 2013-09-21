@@ -1,4 +1,5 @@
-# irc-stream [![Build Status](https://secure.travis-ci.org/clux/irc-stream.png)](http://travis-ci.org/clux/irc-stream)
+# irc-stream [![Build Status](https://secure.travis-ci.org/clux/irc-stream.png)](http://travis-ci.org/clux/irc-stream) [![Dependency Status](https://david-dm.org/clux/irc-stream.png)](https://david-dm.org/clux/irc-stream)
+
 irc-stream is a minimalistic, streaming bot wrapper for the [irc module](https://npmjs.org/package/irc).
 
 irc-stream will relay any combination of the following:
