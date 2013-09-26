@@ -3,15 +3,16 @@ var Duplex = require('stream').Duplex;
 //var log = require('logule').init(module);
 
 // opts.noChan, opts.answerPms, opts.allErrors
-function IrcStream(server, name, opts) {
+function IrcStream(server, name, ircOpts, opts) {
   if (!(this instanceof IrcStream)) {
-    return new IrcStream(server, name, opts);
+    return new IrcStream(server, name, ircOpts, opts);
   }
   Duplex.call(this, {objectMode: true});
+  ircOpts = ircOpts || {};
   opts = opts || {};
 
   // keep the bot instance public if people want to get at it
-  this.bot = new Client(server, name, opts);
+  this.bot = new Client(server, name, ircOpts);
   if (!opts.allErrors) {
     this.bot.addListener('error', function () {}); // never usually care about errors
   }

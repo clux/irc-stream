@@ -15,15 +15,24 @@ Messages can be written like for a writable stream, and messages sent will be se
 Ideally, use it with [gu](https://npmjs.org/package/gu):
 
 ```javascript
-var ircStream = require('irc-stream')(ircModuleArgs);
+var ircStream = require('irc-stream')(ircServer, ircName, ircModuleOpts, ircStreamOpts);
 var gu = require('gu')(scriptPath, scriptFiles);
 
 ircStream.pipe(gu).pipe(ircStream);
 ```
 
-The first three `irc-stream` arguments are simply passed through to the [irc module](https://npmjs.org/package/irc). [Standing on the shoulders of giants](http://en.wikipedia.org/wiki/Standing_on_the_shoulders_of_giants).
+The first three `irc-stream` arguments are simply passed through to the [irc module](https://npmjs.org/package/irc).
 
-TODO: reveal extra args
+## Options
+The fourth argument dictate how we listen on IRC:
+
+```js
+{
+  allErrors: Boolean, // ignore all error events to the `irc` client - default `true`
+  noChan: Boolean,    // ignore channel directed messages - default `false`
+  answerPms: Boolean  //  respond to private messages - default `true`
+}
+```
 
 ## Installation
 
