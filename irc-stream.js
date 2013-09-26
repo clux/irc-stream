@@ -15,26 +15,33 @@ function IrcStream(server, name, opts) {
   if (!opts.allErrors) {
     this.bot.addListener('error', function () {}); // never usually care about errors
   }
-  this.chan = opts.channels[0];
 
   // respond directly - in channel - to anything matching chanReg
-  if (!opts.noChan) {
-    var chanReg = new RegExp('^' + name + '[\\s,\\:](.*)');
-    this.bot.addListener('message', function (from, to, msg) {
-      if (!chanReg.test(msg)) {
-        return; // message not for me
-      }
-      var content = msg.match(chanReg)[1].trim();
-      if (!content) {
-        return; // empty statement
-      }
-      if (content) {
-        var o = {user: to + ':' + from, name: from, message: content};
-        //log.trace("IrcStream departure Chan: %j", o);
-        this.push(o);
-      }
-    }.bind(this));
-  }
+  var registerChanHandler = function () {
+    if (!opts.noChan) {
+      var chanReg = new RegExp('^' + name + '[\\s,\\:](.*)');
+      this.bot.addListener('message', function (from, to, msg) {
+        if (!chanReg.test(msg)) {
+          return; // message not for me
+        }
+        var content = msg.match(chanReg)[1].trim();
+        if (!content) {
+          return; // empty statement
+        }
+        if (content) {
+          var o = {user: to + ':' + from, name: from, message: content};
+          //log.trace("IrcStream departure Chan: %j", o);
+          this.push(o);
+        }
+      }.bind(this));
+    }
+  }.bind(this);
+
+  this.bot.addListener('registered', function (data) {
+    name = data.args[0];
+    registerChanHandler(); // will listen on the name given
+  });
+
   // optionally listen for pms
   if (opts.answerPms) {
     this.bot.addListener('pm', function (nick, msg) {
