@@ -10,6 +10,7 @@ function IrcStream(server, name, ircOpts, opts) {
   Duplex.call(this, {objectMode: true});
   ircOpts = ircOpts || {};
   opts = opts || {};
+  this.opts = opts;
 
   // keep the bot instance public if people want to get at it
   this.bot = new Client(server, name, ircOpts);
@@ -67,7 +68,7 @@ IrcStream.prototype._write = function (obj, enc, cb) {
     var chan = split[0];
     var user = split[1];
     // if multiline message in chan - only highlight on first line
-    if (this.lastUser === obj.user) {
+    if (this.lastUser === obj.user || this.opts.announcerMode) {
       this.bot.say(chan, obj.message);
     }
     else {

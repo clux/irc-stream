@@ -30,7 +30,8 @@ The fourth argument dictate how we listen on IRC:
 {
   allErrors: Boolean, // ignore all error events to the `irc` client - default `true`
   noChan: Boolean,    // ignore channel directed messages - default `false`
-  answerPms: Boolean  //  respond to private messages - default `true`
+  answerPms: Boolean, //  respond to private messages - default `true`
+  announcerMode: Boolean // don't respond directly in channel - default `false`
 }
 ```
 
