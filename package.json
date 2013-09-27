@@ -2,7 +2,7 @@
   "name": "irc-stream",
   "description": "A duplex streaming IRC bot built on top of `irc`",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "clux/irc-stream"
