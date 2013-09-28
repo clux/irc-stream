@@ -11,6 +11,9 @@ function IrcStream(server, name, ircOpts, opts) {
   ircOpts = ircOpts || {};
   opts = opts || {};
   this.opts = opts;
+  if (this.opts.announcerMode && this.opts.conversationMode) {
+    throw new Error("announcerMode and conversationMode are mutually exclusive");
+  }
 
   // keep the bot instance public if people want to get at it
   this.bot = new Client(server, name, ircOpts);
@@ -57,7 +60,7 @@ IrcStream.prototype = Object.create(Duplex.prototype);
 
 IrcStream.prototype._write = function (obj, enc, cb) {
   //log.trace("IrcStream arrival: %j", obj);
-  if (obj.user == undefined || obj.message == undefined) {
+  if (obj.user == null || obj.message == null) {
     throw new Error("Improper object written to IrcStream");
   }
   if (!obj.user || obj.user.indexOf(':') < 0) {
@@ -67,12 +70,14 @@ IrcStream.prototype._write = function (obj, enc, cb) {
     var split = obj.user.split(':');
     var chan = split[0];
     var user = split[1];
-    // if multiline message in chan - only highlight on first line
-    if (this.lastUser === obj.user || this.opts.announcerMode) {
-      this.bot.say(chan, obj.message);
+    // always highlight in conversationMode, never in announcerMode
+    // if none of the modes, then highlight only on new target
+    var doHighLight = this.lastUser !== obj.user || this.opts.conversationMode;
+    if (!this.opts.announcerMode && doHighLight) {
+      this.bot.say(chan, user + ': ' + obj.message);
     }
     else {
-      this.bot.say(chan, user + ': ' + obj.message);
+      this.bot.say(chan, obj.message); // dont highlight (announcer || !doHighlight)
     }
     this.lastUser = obj.user;
   }

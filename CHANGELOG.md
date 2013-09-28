@@ -1,6 +1,10 @@
+0.0.5 / 2013-09-28
+==================
+ * Added `conversationMode` option
+
 0.0.4 / 2013-09-27
 ==================
-  * Added `announcerMode` to options
+ * Added `announcerMode` to options
 
 0.0.2 / 2013-09-26
 ==================

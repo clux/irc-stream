@@ -32,8 +32,11 @@ The fourth argument dictate how we listen on IRC:
   noChan: Boolean,    // ignore channel directed messages - default `false`
   answerPms: Boolean, //  respond to private messages - default `true`
   announcerMode: Boolean // don't respond directly in channel - default `false`
+  conversationMode: Boolean // always respond directly in channel - default `false`
 }
 ```
+
+NB: Can only do one of `announcerMode` and `conversationMode`.
 
 ## Installation
 
