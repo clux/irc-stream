@@ -1,3 +1,7 @@
+0.0.6 / 2014-03-03
+==================
+ * Added `participationChance` option (from @john-peterson)
+
 0.0.5 / 2013-09-28
 ==================
  * Added `conversationMode` option
