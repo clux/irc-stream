@@ -11,10 +11,7 @@ function IrcStream(server, name, ircOpts, opts) {
   ircOpts = ircOpts || {};
   opts = opts || {};
   this.opts = opts;
-
-  // default value
-  if (typeof this.opts.participationChance === 'undefined')
-    this.opts.participationChance = 0;
+  this.opts.participationChance = this.opts.participationChance | 0;
 
   if (this.opts.announcerMode && this.opts.conversationMode) {
     throw new Error("announcerMode and conversationMode are mutually exclusive");
