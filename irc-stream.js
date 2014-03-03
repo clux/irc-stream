@@ -11,6 +11,11 @@ function IrcStream(server, name, ircOpts, opts) {
   ircOpts = ircOpts || {};
   opts = opts || {};
   this.opts = opts;
+
+  // default value
+  if (typeof this.opts.participationChance === 'undefined')
+    this.opts.participationChance = 0;
+
   if (this.opts.announcerMode && this.opts.conversationMode) {
     throw new Error("announcerMode and conversationMode are mutually exclusive");
   }
@@ -26,10 +31,29 @@ function IrcStream(server, name, ircOpts, opts) {
     if (!opts.noChan) {
       var chanReg = new RegExp('^' + name + '[\\s,\\:](.*)');
       this.bot.addListener('message', function (from, to, msg) {
-        if (!chanReg.test(msg)) {
-          return; // message not for me
+        var reply = false;
+        var content = '';
+
+        // check if we're addressed
+        if (chanReg.test(msg)) {
+          content = msg.match(chanReg)[1];
+          reply = true;
         }
-        var content = msg.match(chanReg)[1].trim();
+
+        // check if we should reply without being addressed
+        if (!reply) {
+          var prob = Math.floor(Math.random() * 100) + 1;
+          if (this.opts.participationChance >= prob) {
+            reply = true;
+            content = msg;
+          }
+        }
+
+        // check if we should reply
+        if (!reply)
+          return;
+
+        content = content.trim();
         if (!content) {
           return; // empty statement
         }

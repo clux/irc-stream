@@ -33,6 +33,7 @@ The fourth argument dictate how we listen on IRC:
   answerPms: Boolean, //  respond to private messages - default `true`
   announcerMode: Boolean // don't respond directly in channel - default `false`
   conversationMode: Boolean // always respond directly in channel - default `false`
+  participationChance: Number // percentage probability to respond without being addressed - default `0`
 }
 ```
 
