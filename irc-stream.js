@@ -26,7 +26,7 @@ function IrcStream(server, name, ircOpts, opts) {
   // respond directly - in channel - to anything matching chanReg
   var registerChanHandler = function () {
     if (!opts.noChan) {
-      var chanReg = new RegExp('^' + name + '[\\s,\\:](.*)');
+      var chanReg = new RegExp('^' + name + '[\\s,\\:](.*)', 'i');
       this.bot.addListener('message', function (from, to, msg) {
         var reply = false;
         var content = '';
