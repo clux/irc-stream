@@ -1,3 +1,7 @@
+0.0.8 / 2014-03-05
+==================
+  * Channel identification now case insensitive.
+
 0.0.7 / 2014-03-03
 ==================
  * Added `participationChance` option (from @john-peterson)
