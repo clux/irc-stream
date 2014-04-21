@@ -12,7 +12,7 @@ Messages can be written like for a writable stream, and messages sent will be se
 
 
 ## Usage
-Ideally, use it with [gu](https://npmjs.org/package/gu):
+Ideally, use it with [gu](https://npmjs.org/package/gu) as both a readable and writable stream:
 
 ```javascript
 var ircStream = require('irc-stream')(ircServer, ircName, ircModuleOpts, ircStreamOpts);
@@ -21,7 +21,10 @@ var gu = require('gu')(scriptPath, scriptFiles);
 ircStream.pipe(gu).pipe(ircStream);
 ```
 
-The first three `irc-stream` arguments are simply passed through to the [irc module](https://npmjs.org/package/irc).
+Where the first three `irc-stream` arguments are simply passed through to the [irc module](https://npmjs.org/package/irc).
+
+Alternatively you could use it as just a readable stream or a writable stream. See [flight-stream](https://github.com/clux/flight-stream) for an example as using it as a writable stream only.
+
 
 ## Options
 The fourth argument dictate how we listen on IRC:
