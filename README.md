@@ -35,12 +35,12 @@ The fourth argument dictate how we listen on IRC:
 
 ```js
 {
-  allErrors: Boolean, // ignore all error events to the `irc` client - default `true`
-  noChan: Boolean,    // ignore channel directed messages - default `false`
+  allErrors: Boolean, // allow all errors from `irc` to fire - default `false`
+  ignoreChannel: Boolean,    // ignore channel directed messages - default `false`
   answerPms: Boolean, //  respond to private messages - default `true`
   announcerMode: Boolean // don't respond directly in channel - default `false`
   conversationMode: Boolean // always respond directly in channel - default `false`
-  participationChance: Number // percentage probability to respond without being addressed - default `0`
+  participationChance: Number // probability to respond without being addressed - default `0` (0 to 1)
 }
 ```
 
@@ -49,7 +49,7 @@ NB: Can only do one of `announcerMode` and `conversationMode`.
 ## Installation
 
 ```sh
-$ npm install irc-stream --save
+$ npm install irc-stream
 ```
 
 ## Running tests

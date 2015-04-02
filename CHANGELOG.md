@@ -1,3 +1,9 @@
+0.1.0 / 2015-04-03
+==================
+  * `participationChance` now a number in the range `0` to `1`
+  * `noChan` option renamed to `ignoreChannel`
+  * Module now has tests
+
 0.0.8 / 2014-03-05
 ==================
   * Channel identification now case insensitive.
