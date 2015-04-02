@@ -46,15 +46,9 @@ function IrcStream(server, name, ircOpts, opts) {
           }
         }
 
-        // check if we should reply
-        if (!reply)
-          return;
-
+        // reply if we should and the statement was not-empty
         content = content.trim();
-        if (!content) {
-          return; // empty statement
-        }
-        if (content) {
+        if (reply && content) {
           var o = {user: to + ':' + from, name: from, message: content};
           //log.trace("IrcStream departure Chan: %j", o);
           this.push(o);

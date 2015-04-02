@@ -1,8 +1,7 @@
-var tap = require('tap')
-  , test = tap.test
-  , gu = require('../');
+var ircStream = require(process.env.IRCSTREAM_COV ? '../irc-stream-cov' : '../');
 
-test("all-the-tests", function (t) {
+
+exports.connection =  function (t) {
   //TODO:
   // 1. set up an IRC server
   // 2. connect to the IRC server
@@ -10,5 +9,5 @@ test("all-the-tests", function (t) {
   // 4. say something to test the handler
   // 5. change the handler file
   // 6. say something to verify the handler updated itself
-  t.end();
-});
+  t.done();
+};

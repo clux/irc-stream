@@ -16,14 +16,15 @@
   ],
   "main": "irc-stream.js",
   "scripts": {
-    "test": "tap test/*.js"
+    "test": "nodeunit --reporter=verbose test/*.js",
+    "precoverage": "jscoverage irc-stream.js",
+    "coverage": "IRCSTREAM_COV=1 nodeunit --reporter=lcov test/*.js",
+    "coveralls": "npm run coverage | coveralls"
   },
   "dependencies": {
-    "irc": "~0.3.6"
+    "irc": "^0.3.9"
   },
-  "devDependencies": {
-    "tap": "~0.4.4"
-  },
+  "devDependencies": {},
   "bugs": {
     "url": "http://github.com/clux/irc-stream/issues"
   },

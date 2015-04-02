@@ -1,4 +1,8 @@
-# irc-stream [![Build Status](https://secure.travis-ci.org/clux/irc-stream.png)](http://travis-ci.org/clux/irc-stream) [![Dependency Status](https://david-dm.org/clux/irc-stream.png)](https://david-dm.org/clux/irc-stream)
+# irc-stream
+[![npm status](http://img.shields.io/npm/v/irc-stream.svg)](https://www.npmjs.org/package/irc-stream)
+[![build status](https://secure.travis-ci.org/clux/irc-stream.svg)](http://travis-ci.org/clux/irc-stream)
+[![dependency status](https://david-dm.org/clux/irc-stream.svg)](https://david-dm.org/clux/irc-stream)
+[![coverage status](http://img.shields.io/coveralls/clux/irc-stream.svg)](https://coveralls.io/r/clux/irc-stream)
 
 irc-stream is a minimalistic, streaming bot wrapper for the [irc module](https://npmjs.org/package/irc).
 
@@ -14,7 +18,7 @@ Messages can be written like for a writable stream, and messages sent will be se
 ## Usage
 Ideally, use it with [gu](https://npmjs.org/package/gu) as both a readable and writable stream:
 
-```javascript
+```js
 var ircStream = require('irc-stream')(ircServer, ircName, ircModuleOpts, ircStreamOpts);
 var gu = require('gu')(scriptPath, scriptFiles);
 
@@ -44,20 +48,15 @@ NB: Can only do one of `announcerMode` and `conversationMode`.
 
 ## Installation
 
-```bash
+```sh
 $ npm install irc-stream --save
 ```
 
 ## Running tests
-Install development dependencies
+Install development dependencies and run test command:
 
-```bash
+```sh
 $ npm install
-```
-
-Run the tests
-
-```bash
 $ npm test
 ```
 
