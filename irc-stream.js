@@ -35,11 +35,14 @@ function IrcStream(server, name, ircOpts, opts) {
     }
     // respond directly in channel - to anything matching addressedReg
     self.bot.addListener('message', function (from, to, msg) {
+      if (to[0] !== '#') {
+        return; // ignore pms - handled separately
+      }
       var content = '';
       if (addressedReg.test(msg)) {
         content = msg.match(addressedReg)[1].trim();
       }
-      else if (trials.bernoulli(self.opts.participationChance | 0)) {
+      else if (trials.bernoulli(self.opts.participationChance || 0)) {
         content = msg.trim();
       }
       if (content) {

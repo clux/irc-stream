@@ -1,3 +1,8 @@
+0.2.0 / XXXXXXXXXX
+==================
+  * PMs no longer trigger potentially two readable messages #3
+  * Fixed `participationChance` being wrongly coerced to an integer
+
 0.1.0 / 2015-04-03
 ==================
   * `participationChance` now a number in the range `0` to `1`

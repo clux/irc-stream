@@ -51,7 +51,8 @@ exports.basic =  function (t) {
 
   // 2. connect the ircStream `bot` to the server
   var istreamOpts = {
-    answerPms: true
+    answerPms: true,
+    participationChance: 1
   };
   var istream = new IrcStream('localhost', 'bot', ircOpts, istreamOpts);
   sulfur.absorb(istream.log, 'irc-stream');
@@ -63,16 +64,22 @@ exports.basic =  function (t) {
   person.addListener('registered', function () {
     person.say('bot', 'getting this?');
     person.say('#test', 'bot: hi');
-    person.say('#test', 'unrelated');
+    person.say('#test', 'participate');
     setTimeout(function () {
       var m1 = istream.read();
-      t.deepEqual(m1, { user: 'dude', name: 'dude', message: 'getting this?'}, 'pm');
+      var excp1 = { user: 'dude', name: 'dude', message: 'getting this?'};
+      t.deepEqual(m1, excp1, 'pm read');
 
       var m2 = istream.read();
-      t.deepEqual(m2, { user: '#test:dude', name: 'dude', message: 'hi' }, 'chan');
+      var excp2 = { user: '#test:dude', name: 'dude', message: 'hi' };
+      t.deepEqual(m2, excp2, 'chan message read');
 
       var m3 = istream.read();
-      t.equal(m3, null, 'ignored chan msg');
+      var excp3 = {"user":"#test:dude","name":"dude","message":"participate"};
+      t.deepEqual(m3, excp3, 'unrelated participation message read');
+
+      var m4 = istream.read();
+      t.equal(m4, null, 'no fourth message');
 
       person.disconnect();
       istream.bot.disconnect();
