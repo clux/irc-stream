@@ -1,72 +1,60 @@
 var Client = require('irc').Client;
 var Duplex = require('stream').Duplex;
-//var log = require('logule').init(module);
+var trials = require('trials');
+var Smell = require('smell');
 
-// opts.noChan, opts.answerPms, opts.allErrors
 function IrcStream(server, name, ircOpts, opts) {
   if (!(this instanceof IrcStream)) {
     return new IrcStream(server, name, ircOpts, opts);
   }
-  Duplex.call(this, {objectMode: true});
-  ircOpts = ircOpts || {};
-  opts = opts || {};
-  this.opts = opts;
-  this.opts.participationChance = this.opts.participationChance | 0;
+  Duplex.call(this, { objectMode: true });
+  this.opts = opts || {};
+  this.log = new Smell();
+
+  var self = this;
 
   if (this.opts.announcerMode && this.opts.conversationMode) {
     throw new Error("announcerMode and conversationMode are mutually exclusive");
   }
 
   // keep the bot instance public if people want to get at it
-  this.bot = new Client(server, name, ircOpts);
-  if (!opts.allErrors) {
+  this.bot = new Client(server, name, ircOpts || {});
+  if (!this.opts.allErrors) {
     this.bot.addListener('error', function () {}); // never usually care about errors
   }
 
-  // respond directly - in channel - to anything matching chanReg
-  var registerChanHandler = function () {
-    if (!opts.noChan) {
-      var chanReg = new RegExp('^' + name + '[\\s,\\:](.*)', 'i');
-      this.bot.addListener('message', function (from, to, msg) {
-        var reply = false;
-        var content = '';
 
-        // check if we're addressed
-        if (chanReg.test(msg)) {
-          content = msg.match(chanReg)[1];
-          reply = true;
-        }
-
-        // check if we should reply without being addressed
-        if (!reply) {
-          var prob = Math.floor(Math.random() * 100) + 1;
-          if (this.opts.participationChance >= prob) {
-            reply = true;
-            content = msg;
-          }
-        }
-
-        // reply if we should and the statement was not-empty
-        content = content.trim();
-        if (reply && content) {
-          var o = {user: to + ':' + from, name: from, message: content};
-          //log.trace("IrcStream departure Chan: %j", o);
-          this.push(o);
-        }
-      }.bind(this));
-    }
-  }.bind(this);
-
+  // start listening in channel for messages to ourselves
+  // but only after we have registered so we know what name we have
   this.bot.addListener('registered', function (data) {
-    name = data.args[0];
-    registerChanHandler(); // will listen on the name given
+    name = data.args[0]; // actual irc name
+
+    var addressedReg = new RegExp('^' + name + '[\\s,\\:](.*)', 'i');
+    if (self.opts.ignoreChannel) {
+      return;
+    }
+    // respond directly in channel - to anything matching addressedReg
+    self.bot.addListener('message', function (from, to, msg) {
+      var content = '';
+      if (addressedReg.test(msg)) {
+        content = msg.match(addressedReg)[1].trim();
+      }
+      else if (trials.bernoulli(self.opts.participationChance | 0)) {
+        content = msg.trim();
+      }
+      if (content) {
+        var o = {user: to + ':' + from, name: from, message: content};
+        self.log.info("IrcStream departure Chan: %j", o);
+        self.push(o);
+      }
+    });
   });
 
-  // optionally listen for pms
-  if (opts.answerPms) {
+  // listen for pms if option set (can do that immediately)
+  if (this.opts.answerPms) {
     this.bot.addListener('pm', function (nick, msg) {
       var o = {user: nick, name: nick, message: msg};
-      //log.trace("IrcStream departure PM: %j", o);
+      this.log.info("IrcStream departure PM: %j", o);
       this.push(o);
     }.bind(this));
   }
@@ -74,7 +62,7 @@ function IrcStream(server, name, ircOpts, opts) {
 IrcStream.prototype = Object.create(Duplex.prototype);
 
 IrcStream.prototype._write = function (obj, enc, cb) {
-  //log.trace("IrcStream arrival: %j", obj);
+  this.log.info("IrcStream arrival: %j", obj);
   if (obj.user == null || obj.message == null) {
     throw new Error("Improper object written to IrcStream");
   }
