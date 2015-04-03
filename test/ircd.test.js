@@ -3,7 +3,6 @@ var Client = require('irc').Client;
 var sulfur = require('sulfur');
 var Smell = require('smell');
 var EE = require('events').EventEmitter;
-var inherits = require('util').inherits;
 
 // [Server, (client, irc-stream)] helper class
 var i = 0;
@@ -61,7 +60,7 @@ function Connection(istreamOpts) {
     });
   });
 }
-inherits(Connection, EE);
+Connection.prototype = Object.create(EE.prototype);
 
 Connection.prototype.close = function (cb) {
   var self = this;
@@ -181,7 +180,6 @@ exports.defaultOptsResponses = function (t) {
     }, 100);
   });
 };
-
 
 exports.neverHighlight = function (t) {
   var istreamOpts = {
