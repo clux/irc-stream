@@ -43,15 +43,17 @@ function Connection(istreamOpts) {
   sulfur.absorb(this.istream.log, 'irc-stream');
 
   // 3. connect the irc.Client `dude` to the server
-  self.client = new Client('localhost', 'dude', ircOpts);
-  self.client.addListener('error', function () {});
+  this.istream.bot.on('registered', function () {
+    self.client = new Client('localhost', 'dude', ircOpts);
+    self.client.addListener('error', function () {});
 
-  this.resps = [];
-  self.client.addListener('message', function (from, to, message) {
-    self.resps.push({ from: from, to: to, message: message});
-  });
-  self.client.addListener('registered', function () {
-    self.emit('ready', self.istream, self.client);
+    self.resps = [];
+    self.client.addListener('message', function (from, to, message) {
+      self.resps.push({ from: from, to: to, message: message});
+    });
+    self.client.addListener('registered', function () {
+      self.emit('ready', self.istream, self.client);
+    });
   });
 }
 Connection.prototype = new EE();
@@ -96,7 +98,7 @@ exports.pmsAndParticipate = function (t) {
 
       conn.close();
       t.done();
-    }, 100);
+    }, 500);
   });
 };
 
@@ -119,7 +121,7 @@ exports.ignoreChannel = function (t) {
 
       conn.close();
       t.done();
-    }, 100);
+    }, 500);
   });
 };
 
@@ -163,8 +165,8 @@ exports.defaultOptsResponses = function (t) {
 
         conn.close();
         t.done();
-      }, 100);
-    }, 100);
+      }, 500);
+    }, 500);
   });
 };
 
@@ -192,7 +194,7 @@ exports.neverHighlight = function (t) {
 
       conn.close();
       t.done();
-    }, 100);
+    }, 500);
   });
 };
 
@@ -219,6 +221,6 @@ exports.alwaysHighlight = function (t) {
 
       conn.close();
       t.done();
-    }, 100);
+    }, 500);
   });
 };
