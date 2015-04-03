@@ -59,9 +59,12 @@ function Connection(istreamOpts) {
 Connection.prototype = new EE();
 
 Connection.prototype.close = function (cb) {
-  this.client.disconnect();
-  this.istream.bot.disconnect();
-  this.ircd.close(cb);
+  var self = this;
+  this.client.disconnect('bye', function () {
+    self.istream.bot.disconnect('bye', function () {
+      self.ircd.close(cb);
+    });
+  });
 };
 
 // -------------------------------------------------------------
