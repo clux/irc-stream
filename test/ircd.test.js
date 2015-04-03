@@ -99,7 +99,7 @@ exports.pmsAndParticipate = function (t) {
       conn.close(function () {
         t.done();
       });
-    }, 100);
+    }, 500);
   });
 };
 
@@ -123,7 +123,7 @@ exports.ignoreChannel = function (t) {
       conn.close(function () {
         t.done();
       });
-    }, 100);
+    }, 500);
   });
 };
 
@@ -168,8 +168,8 @@ exports.defaultOptsResponses = function (t) {
         conn.close(function () {
           t.done();
         });
-      }, 100);
-    }, 100);
+      }, 500);
+    }, 500);
   });
 };
 
@@ -198,7 +198,7 @@ exports.neverHighlight = function (t) {
       conn.close(function () {
         t.done();
       });
-    }, 100);
+    }, 500);
   });
 };
 
@@ -225,6 +225,6 @@ exports.alwaysHighlight = function (t) {
 
       conn.close();
       t.done();
-    }, 100);
+    }, 500);
   });
 };
