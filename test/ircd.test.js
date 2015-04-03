@@ -3,6 +3,7 @@ var Client = require('irc').Client;
 var sulfur = require('sulfur');
 var Smell = require('smell');
 var EE = require('events').EventEmitter;
+var inherits = require('util').inherits;
 
 // [Server, (client, irc-stream)] helper class
 var i = 0;
@@ -60,16 +61,14 @@ function Connection(istreamOpts) {
     });
   });
 }
-Connection.prototype = new EE();
+inherits(Connection, EE);
 
 Connection.prototype.close = function (cb) {
   var self = this;
   this.client.disconnect('bye', function () {
     self.istream.bot.disconnect('bye', function () {
-      setTimeout(function () {
-        self.ircd.close(cb);
-        self.log.warn('closing conn', self.i);
-      }, 100); // wait a little extra before closing server
+      self.log.warn('closing conn', self.i);
+      self.ircd.close(cb);
     });
   });
 };
@@ -109,7 +108,7 @@ exports.pmsAndParticipate = function (t) {
       conn.close(function () {
         t.done();
       });
-    }, 500);
+    }, 100);
   });
 };
 
@@ -133,7 +132,7 @@ exports.ignoreChannel = function (t) {
       conn.close(function () {
         t.done();
       });
-    }, 500);
+    }, 100);
   });
 };
 
@@ -178,8 +177,8 @@ exports.defaultOptsResponses = function (t) {
         conn.close(function () {
           t.done();
         });
-      }, 500);
-    }, 500);
+      }, 100);
+    }, 100);
   });
 };
 
@@ -208,7 +207,7 @@ exports.neverHighlight = function (t) {
       conn.close(function () {
         t.done();
       });
-    }, 500);
+    }, 100);
   });
 };
 
@@ -235,6 +234,6 @@ exports.alwaysHighlight = function (t) {
 
       conn.close();
       t.done();
-    }, 500);
+    }, 100);
   });
 };
