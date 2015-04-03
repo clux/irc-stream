@@ -62,7 +62,9 @@ Connection.prototype.close = function (cb) {
   var self = this;
   this.client.disconnect('bye', function () {
     self.istream.bot.disconnect('bye', function () {
-      self.ircd.close(cb);
+      setTimeout(function () {
+        self.ircd.close(cb);
+      }, 100); // wait a little extra before closing server
     });
   });
 };
