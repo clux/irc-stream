@@ -96,7 +96,7 @@ exports.pmsAndParticipate = function (t) {
 
       conn.close();
       t.done();
-    }, 50);
+    }, 100);
   });
 };
 
@@ -119,7 +119,7 @@ exports.ignoreChannel = function (t) {
 
       conn.close();
       t.done();
-    }, 50);
+    }, 100);
   });
 };
 
@@ -164,7 +164,7 @@ exports.defaultOptsResponses = function (t) {
         conn.close();
         t.done();
       }, 100);
-    }, 50);
+    }, 100);
   });
 };
 
