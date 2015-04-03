@@ -2,6 +2,9 @@
 ==================
   * PMs no longer trigger potentially two readable messages #3
   * Fixed `participationChance` being wrongly coerced to an integer
+  * `announcerMode` renamed to `neverHighlight`
+  * `conversationMode` renamed to `alwaysHighlight`
+  * `answerPms` default is `false` (although this was the case before - wrong docs)
 
 0.1.0 / 2015-04-03
 ==================

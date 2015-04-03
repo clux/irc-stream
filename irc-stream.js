@@ -13,8 +13,8 @@ function IrcStream(server, name, ircOpts, opts) {
 
   var self = this;
 
-  if (this.opts.announcerMode && this.opts.conversationMode) {
-    throw new Error("announcerMode and conversationMode are mutually exclusive");
+  if (this.opts.neverHighlight && this.opts.alwaysHighlight) {
+    throw new Error("neverHighlight and alwaysHighlight are mutually exclusive");
   }
 
   // keep the bot instance public if people want to get at it
@@ -72,14 +72,14 @@ IrcStream.prototype._write = function (obj, enc, cb) {
     var split = obj.user.split(':');
     var chan = split[0];
     var user = split[1];
-    // always highlight in conversationMode, never in announcerMode
-    // if none of the modes, then highlight only on new target
-    var doHighLight = this.lastUser !== obj.user || this.opts.conversationMode;
-    if (!this.opts.announcerMode && doHighLight) {
+
+    // if not in any highlight modes, then only on new target
+    var doHighLight = this.lastUser !== obj.user || this.opts.alwaysHighlight;
+    if (!this.opts.neverHighlight && doHighLight) {
       this.bot.say(chan, user + ': ' + obj.message);
     }
     else {
-      this.bot.say(chan, obj.message); // dont highlight (announcer || !doHighlight)
+      this.bot.say(chan, obj.message);
     }
     this.lastUser = obj.user;
   }

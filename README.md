@@ -31,20 +31,20 @@ Alternatively you could use it as just a readable stream or a writable stream. S
 
 
 ## Options
-The fourth argument dictate how we listen on IRC:
+The fourth argument control how we listen on IRC. By default the following options are all disabled or zero:
 
 ```js
 {
-  allErrors: Boolean, // allow all errors from `irc` to fire - default `false`
-  ignoreChannel: Boolean,    // ignore channel directed messages - default `false`
-  answerPms: Boolean, //  respond to private messages - default `true`
-  announcerMode: Boolean // don't respond directly in channel - default `false`
-  conversationMode: Boolean // always respond directly in channel - default `false`
-  participationChance: Number // probability to respond without being addressed - default `0` (0 to 1)
+  allErrors: Boolean, // manually handle `irc` error events
+  ignoreChannel: Boolean, // ignore channel directed messages
+  answerPms: Boolean, // respond to private messages
+  neverHighlight: Boolean // never highlight channel responses
+  alwaysHighlight: Boolean // always highlight channel responses
+  participationChance: Number // probability to respond without being addressed
 }
 ```
 
-NB: Can only do one of `announcerMode` and `conversationMode`.
+NB: Can only do one of `neverHighlight` and `alwaysHighlight`. By default, `irc-stream` will highlight the channel recipient on the first message only.
 
 ## Installation
 
