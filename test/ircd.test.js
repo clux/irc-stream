@@ -58,10 +58,10 @@ function Connection(istreamOpts) {
 }
 Connection.prototype = new EE();
 
-Connection.prototype.close = function () {
+Connection.prototype.close = function (cb) {
   this.client.disconnect();
   this.istream.bot.disconnect();
-  this.ircd.close();
+  this.ircd.close(cb);
 };
 
 // -------------------------------------------------------------
@@ -96,9 +96,10 @@ exports.pmsAndParticipate = function (t) {
       var m4 = istream.read();
       t.equal(m4, null, 'no fourth message');
 
-      conn.close();
-      t.done();
-    }, 500);
+      conn.close(function () {
+        t.done();
+      });
+    }, 100);
   });
 };
 
@@ -119,9 +120,10 @@ exports.ignoreChannel = function (t) {
       var m1 = istream.read();
       t.deepEqual(m1, null, 'ignoring pms and chan');
 
-      conn.close();
-      t.done();
-    }, 500);
+      conn.close(function () {
+        t.done();
+      });
+    }, 100);
   });
 };
 
@@ -163,10 +165,11 @@ exports.defaultOptsResponses = function (t) {
         t.deepEqual(resps[1], r2, 'chan msg 1 to person (highlighted)');
         t.deepEqual(resps[2], r3, 'chan msg 2 to person (not highlighted)');
 
-        conn.close();
-        t.done();
-      }, 500);
-    }, 500);
+        conn.close(function () {
+          t.done();
+        });
+      }, 100);
+    }, 100);
   });
 };
 
@@ -192,9 +195,10 @@ exports.neverHighlight = function (t) {
       t.deepEqual(resps[1], r2, 'chan msg 1 to person (not highlighted)');
       t.deepEqual(resps[2], r3, 'chan msg 2 to person (same)');
 
-      conn.close();
-      t.done();
-    }, 500);
+      conn.close(function () {
+        t.done();
+      });
+    }, 100);
   });
 };
 
@@ -221,6 +225,6 @@ exports.alwaysHighlight = function (t) {
 
       conn.close();
       t.done();
-    }, 500);
+    }, 100);
   });
 };
