@@ -16,8 +16,8 @@ function Connection(istreamOpts) {
   this.log = new Smell();
   this.i = i+1;
   i += 1;
-  this.log.warn('started conn' , this.i);
   sulfur.absorb(this.log, 'ircd');
+  this.log.warn('started conn' , this.i);
   this.bot = null;
   this.person = null;
   var self = this;
