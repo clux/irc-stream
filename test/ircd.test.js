@@ -5,6 +5,7 @@ var Smell = require('smell');
 var EE = require('events').EventEmitter;
 
 // [Server, (client, irc-stream)] helper class
+var i = 0;
 function Connection(istreamOpts) {
   EE.call(this);
   // 1. set up irc server
@@ -13,6 +14,9 @@ function Connection(istreamOpts) {
   });
   this.ircd.listen(6667);
   this.log = new Smell();
+  this.i = i+1;
+  i += 1;
+  this.log.warn('started conn' , this.i);
   sulfur.absorb(this.log, 'ircd');
   this.bot = null;
   this.person = null;
@@ -25,7 +29,7 @@ function Connection(istreamOpts) {
 
     c.on('PRIVMSG', function (target, message) {
       // bot sends to person, person sends to bot:
-      //self.log.info('server handle "' + message + '" for', target);
+      self.log.info('server handle "' + message + '" for', target);
       var dest = self[self.bot.id === c.id ? 'person' : 'bot'];
       dest.send(':' + c.nickname + ' PRIVMSG ' + target + ' :' + message);
     });
@@ -64,6 +68,7 @@ Connection.prototype.close = function (cb) {
     self.istream.bot.disconnect('bye', function () {
       setTimeout(function () {
         self.ircd.close(cb);
+        self.log.warn('closing conn', self.i);
       }, 100); // wait a little extra before closing server
     });
   });
