@@ -1,3 +1,8 @@
+0.3.0 / 2015-04-05
+==================
+  * Now uses the simpler `gu@0.5.0` stream specification
+  * Explicit `close(reason, cb)` method that closes the `irc.Client`
+
 0.2.0 / 2015-04-04
 ==================
   * PMs no longer trigger potentially two readable messages #3

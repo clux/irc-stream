@@ -20,13 +20,13 @@ function IrcStream(server, name, ircOpts, opts) {
   // keep the bot instance public if people want to get at it
   this.bot = new Client(server, name, ircOpts || {});
   if (!this.opts.allErrors) {
-    this.bot.addListener('error', function () {}); // never usually care about errors
+    this.bot.on('error', function () {}); // never usually care about errors
   }
 
   // listen for pms if option set (can do that immediately)
   if (this.opts.answerPms) {
-    this.bot.addListener('pm', function (nick, msg) {
-      var o = {user: nick, name: nick, message: msg};
+    this.bot.on('pm', function (nick, msg) {
+      var o = { user: nick, message: msg };
       self.log.info("Incoming PM: %j", o);
       self.push(o);
     });
@@ -34,7 +34,7 @@ function IrcStream(server, name, ircOpts, opts) {
 
   // start listening in channel for messages to ourselves
   // but only after we have registered so we know what name we have
-  this.bot.addListener('registered', function (data) {
+  this.bot.on('registered', function (data) {
     name = data.args[0]; // actual irc name
 
     var addressedReg = new RegExp('^' + name + '[\\s,\\:](.*)', 'i');
@@ -42,7 +42,7 @@ function IrcStream(server, name, ircOpts, opts) {
       return;
     }
     // respond directly in channel - to anything matching addressedReg
-    self.bot.addListener('message#', function (from, to, text) {
+    self.bot.on('message#', function (from, chan, text) {
       var msg = '';
       if (addressedReg.test(text)) {
         msg = text.match(addressedReg)[1].trim();
@@ -51,7 +51,7 @@ function IrcStream(server, name, ircOpts, opts) {
         msg = text.trim();
       }
       if (msg) {
-        var o = {user: to + ':' + from, name: from, message: msg};
+        var o = {user: from, channel: chan, message: msg};
         self.log.info("Incoming Chan: %j", o);
         self.push(o);
       }
@@ -60,32 +60,32 @@ function IrcStream(server, name, ircOpts, opts) {
 }
 IrcStream.prototype = Object.create(Duplex.prototype);
 
+IrcStream.prototype.highlight = function (user, msg) {
+  // if not in any highlight modes, then only on new target
+  var shouldHighLight = this.lastUser !== user || this.opts.alwaysHighlight;
+  var doHighlight = !this.opts.neverHighlight && shouldHighLight;
+  this.lastUser = user;
+  return doHighlight ? user + ': ' + msg : msg;
+};
+
 IrcStream.prototype._write = function (obj, enc, cb) {
   this.log.info("Outgoing: %j", obj);
   if (obj.user == null || obj.message == null) {
     throw new Error("Improper object written to IrcStream");
   }
-  if (!obj.user || obj.user.indexOf(':') < 0) {
+  if (!obj.channel) {
     this.bot.say(obj.user, obj.message);
   }
   else {
-    var split = obj.user.split(':');
-    var chan = split[0];
-    var user = split[1];
-
-    // if not in any highlight modes, then only on new target
-    var doHighLight = this.lastUser !== obj.user || this.opts.alwaysHighlight;
-    if (!this.opts.neverHighlight && doHighLight) {
-      this.bot.say(chan, user + ': ' + obj.message);
-    }
-    else {
-      this.bot.say(chan, obj.message);
-    }
-    this.lastUser = obj.user;
+    this.bot.say(obj.channel, this.highlight(obj.user, obj.message));
   }
   cb();
 };
 
 IrcStream.prototype._read = function () {};
+
+IrcStream.prototype.close = function (reason, cb) {
+  this.bot.disconnect(reason || 'bye', cb);
+};
 
 module.exports = IrcStream;

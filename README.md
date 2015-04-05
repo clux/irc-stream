@@ -8,7 +8,7 @@ irc-stream is a minimalistic, streaming bot wrapper for the [irc module](https:/
 
 irc-stream will relay any combination of the following:
 
-- channel messages addressed to the desired client name (default on)
+- channel messages addressed to the client (default on)
 - pms (default off)
 
 These messages are available as a readable stream, and can thus be piped into a writable stream.

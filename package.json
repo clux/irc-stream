@@ -1,6 +1,6 @@
 {
   "name": "irc-stream",
-  "description": "A duplex streaming IRC bot built on top of `irc`",
+  "description": "A duplex streaming IRC client built on top of `irc`",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "version": "0.2.0",
   "repository": {

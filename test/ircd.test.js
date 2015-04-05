@@ -65,7 +65,7 @@ Connection.prototype = Object.create(EE.prototype);
 Connection.prototype.close = function (cb) {
   var self = this;
   this.client.disconnect('bye', function () {
-    self.istream.bot.disconnect('bye', function () {
+    self.istream.close('bye', function () {
       self.log.warn('closing conn', self.i);
       self.ircd.close(cb);
     });
@@ -90,15 +90,15 @@ exports.pmsAndParticipate = function (t) {
     setTimeout(function () {
       // intercept in istream just afterwards
       var m1 = istream.read();
-      var excp1 = { user: 'dude', name: 'dude', message: 'getting this?'};
+      var excp1 = { user: 'dude', message: 'getting this?'};
       t.deepEqual(m1, excp1, 'pm read');
 
       var m2 = istream.read();
-      var excp2 = { user: '#test:dude', name: 'dude', message: 'hi' };
+      var excp2 = { user: 'dude', channel: '#test', message: 'hi' };
       t.deepEqual(m2, excp2, 'chan message read');
 
       var m3 = istream.read();
-      var excp3 = { user: "#test:dude", name: "dude", message: "participate" };
+      var excp3 = { user: "dude", channel: '#test', message: "participate" };
       t.deepEqual(m3, excp3, 'unrelated participation message read');
 
       var m4 = istream.read();
@@ -148,7 +148,7 @@ exports.defaultOptsResponses = function (t) {
     setTimeout(function () {
       // intercept in istream just afterwards
       var m1 = istream.read();
-      var excp1 = { user: '#test:dude', name: 'dude', message: 'hi' };
+      var excp1 = { user: 'dude', channel: '#test', message: 'hi' };
       t.deepEqual(m1, excp1, 'chan message read on default');
 
       var m2 = istream.read();
@@ -162,8 +162,8 @@ exports.defaultOptsResponses = function (t) {
 
       // write responses from bot to person finally
       istream.write({ user: 'dude', message: 'bonk' });
-      istream.write({ user: '#test:dude', message: 'really?'});
-      istream.write({ user: '#test:dude', message: 'that is insane'});
+      istream.write({ user: 'dude', channel: '#test', message: 'really?'});
+      istream.write({ user: 'dude', channel: '#test', message: 'that is insane'});
       setTimeout(function () {
         var resps = conn.resps;
         var r1 = { from: 'bot', to: 'dude', message: 'bonk' };
@@ -191,8 +191,8 @@ exports.neverHighlight = function (t) {
   conn.on('ready', function (istream) {
     // write messages from bot to person
     istream.write({ user: 'dude', message: 'bonk' });
-    istream.write({ user: '#test:dude', message: 'really?'});
-    istream.write({ user: '#test:dude', message: 'that is insane'});
+    istream.write({ user: 'dude', channel: '#test', message: 'really?'});
+    istream.write({ user: 'dude', channel: '#test', message: 'that is insane'});
     setTimeout(function () {
       var resps = conn.resps;
       var r1 = { from: 'bot', to: 'dude', message: 'bonk' };
@@ -219,8 +219,8 @@ exports.alwaysHighlight = function (t) {
   conn.on('ready', function (istream) {
     // write messages from bot to person
     istream.write({ user: 'dude', message: 'bonk' });
-    istream.write({ user: '#test:dude', message: 'really?'});
-    istream.write({ user: '#test:dude', message: 'that is insane'});
+    istream.write({ user: 'dude', channel: '#test', message: 'really?'});
+    istream.write({ user: 'dude', channel: '#test', message: 'that is insane'});
     setTimeout(function () {
       var resps = conn.resps;
       var r1 = { from: 'bot', to: 'dude', message: 'bonk' };
