@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "irc": "^0.3.9",
+    "smell": "^2.0.2",
     "trials": "^0.1.4"
   },
   "devDependencies": {
@@ -30,7 +31,6 @@
     "ircdkit": "^1.0.2",
     "jscoverage": "^0.5.9",
     "nodeunit": "^0.9.1",
-    "smell": "^2.0.2",
     "sulfur": "^1.0.0"
   },
   "bugs": {
