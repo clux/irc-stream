@@ -1,3 +1,7 @@
+0.3.1 / 2015-05-08
+==================
+  * smell module now correctly in dependencies rather than devDependencies
+
 0.3.0 / 2015-04-05
 ==================
   * Now uses the simpler `gu@0.5.0` stream specification
