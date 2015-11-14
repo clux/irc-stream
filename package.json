@@ -18,8 +18,7 @@
   "scripts": {
     "test": "nodeunit --reporter=verbose test/*.test.js",
     "precoverage": "jscoverage irc-stream.js",
-    "coverage": "IRCSTREAM_COV=1 nodeunit --reporter=lcov test/*.test.js",
-    "coveralls": "npm run coverage | coveralls"
+    "coverage": "IRCSTREAM_COV=1 nodeunit --reporter=lcov test/*.test.js"
   },
   "dependencies": {
     "irc": "^0.3.9",
@@ -27,7 +26,6 @@
     "trials": "^0.1.4"
   },
   "devDependencies": {
-    "coveralls": "^2.11.2",
     "ircdkit": "^1.0.2",
     "jscoverage": "^0.5.9",
     "nodeunit": "^0.9.1",

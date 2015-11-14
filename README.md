@@ -52,13 +52,5 @@ NB: Can only do one of `neverHighlight` and `alwaysHighlight`. By default, `irc-
 $ npm install irc-stream
 ```
 
-## Running tests
-Install development dependencies and run test command:
-
-```sh
-$ npm install
-$ npm test
-```
-
 ## License
 MIT-Licensed. See LICENSE file for details.

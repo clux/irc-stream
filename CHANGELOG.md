@@ -1,3 +1,7 @@
+0.3.1 / 2015-11-15
+==================
+  * Added `.npmignore`
+
 0.3.1 / 2015-05-08
 ==================
   * smell module now correctly in dependencies rather than devDependencies
